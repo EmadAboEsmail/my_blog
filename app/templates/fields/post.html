@@ -1,0 +1,28 @@
+
+ {% extends "layout.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+<div class="container">
+  <h1 class="mb-3">نموذج إدخال منشور</h1>
+
+  <form action="/post" method="post">
+    <div class="mb-3">
+      <label for="title">العنوان</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder="العنوان">
+    </div>
+
+    <div class="mb-3">
+      <label for="content">المحتوى</label>
+      <textarea class="form-control" id="content" name="content" rows="10" cols="50"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label for="tag">التاج</label>
+      <input type="text" class="form-control" id="tag" name="tag" placeholder="التاج">
+    </div> 
+
+    <button type="submit" class="btn btn-primary">إرسال</button>
+  </form>
+</div>
+
+ {% endblock %}

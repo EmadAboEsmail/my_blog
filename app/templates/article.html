@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+    <div class="data">
+      {{article.data}}
+    </div>
+    <hr>
+    <h1>{{article.title}}</h1>
+    <hr>
+    <p> {{article.content}}</p>
+    <hr>
+
+    <span class="btn btn-success">{{article.tag}}</span>
+<a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
+
+{% endblock %}

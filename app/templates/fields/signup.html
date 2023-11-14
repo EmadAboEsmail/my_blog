@@ -1,0 +1,36 @@
+
+{% extends "layout.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <form action="/signup" method="post">
+          <div class="form-group">
+            <label for="username">اسم المستخدم</label>
+            <input type="text" class="form-control" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="email">البريد الإلكتروني</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">كلمة المرور</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">تسجيل</button>
+        </form>
+      </div>
+    </div>
+         {% if error %}
+         <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+               الاسم مستخدم من قبل !
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+         </div>
+       {% endif %}
+ 
+</div>
+{% endblock %}
