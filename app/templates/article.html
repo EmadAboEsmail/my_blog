@@ -3,16 +3,21 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-    <div class="data">
-      {{article.data}}
+<div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <h1>{{ article.title }}</h1>
+        <p>{{ article.content | safe }}</p>
+        <p>
+          <small>تاريخ النشر: {{ article.created_at.strftime("%Y-%m-%d") }}</small>
+        </p>
+      </div>
+      <div class="col-md-4">
+        <!-- <img  alt="صورة المنشور"> -->
+      </div>
     </div>
-    <hr>
-    <h1>{{article.title}}</h1>
-    <hr>
-    <p> {{article.content}}</p>
-    <hr>
-
-    <span class="btn btn-success">{{article.tag}}</span>
+  <p>{{article.user_id}}: {{article.id}} :{{user.username}}</p>
+  </div >
 <a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
 
 {% endblock %}

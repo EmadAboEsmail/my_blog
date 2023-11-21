@@ -2,27 +2,29 @@
  {% extends "layout.html" %}
 {% block title %}{{title}}{% endblock %}
 {% block content %}
-<div class="container">
-  <h1 class="mb-3">نموذج إدخال منشور</h1>
+   <div class="container mt-5">
+        <h1 class="mb-4">إضافة منشور جديد</h1>
+     <h1>{{name.username}}</h1>
+          <h1>{{name.id}}</h1>
 
-  <form action="/post" method="post">
-    <div class="mb-3">
-      <label for="title">العنوان</label>
-      <input type="text" class="form-control" id="title" name="title" placeholder="العنوان">
+        <form action="/post" method="POST">
+            <div class="form-group">
+                <label for="title">العنوان:</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label for="content">المحتوى:</label>
+                <textarea name="content" id="content" class="form-control" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tags">التاجات المرتبطة (مفصولة بفاصلة):</label>
+                <input type="text" name="tags" id="tags" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">إضافة المنشور</button>
+        </form>
     </div>
-
-    <div class="mb-3">
-      <label for="content">المحتوى</label>
-      <textarea class="form-control" id="content" name="content" rows="10" cols="50"></textarea>
-    </div>
-
-    <div class="mb-3">
-      <label for="tag">التاج</label>
-      <input type="text" class="form-control" id="tag" name="tag" placeholder="التاج">
-    </div> 
-
-    <button type="submit" class="btn btn-primary">إرسال</button>
-  </form>
-</div>
 
  {% endblock %}

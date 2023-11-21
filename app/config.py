@@ -2,7 +2,7 @@ import os
 
 
 class Config(object):
-    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SECRET_KEY = "omda717"
     SQLALCHEMY_DATABASE_URI = "sqlite:///blog.db"
     # os.environ.get"SQLALCHEMY_DATABASE_URI")
     # SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get("SQLALCHEMY_TRACK_MODIFICATIONS")
