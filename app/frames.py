@@ -1,15 +1,29 @@
-from flask_wtf import FlasForm
-from wtforms import PasswordField, StringField, SubmitField
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 
-class RegisterForm(FlasForm):
-    email = StringField(label="email", validators=[DataRequired(), Email()])
-    uesrname = StringField(label="uesrname", validators=[DataRequired()])
-    password = PasswordField(
-        label="password", validators=[DataRequired(), Length(min=6)]
+class LoginForm(FlaskForm):
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=5, max=20)]
     )
-    confirm = PasswordField(
-        label="confirm", validators=[DataRequired(), EqualTo(fieldname="password")]
+    password = PasswordField("Password", validators=[DataRequired()])
+    submit = SubmitField("Login")
+
+
+class SignupForm(FlaskForm):
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=5, max=20)]
     )
-    submit = SubmitField(label="Register")
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    confirm_password = PasswordField(
+        "Confirm Password", validators=[DataRequired(), EqualTo("password")]
+    )
+    submit = SubmitField("Signup")
+
+
+class PostForm(FlaskForm):
+    title = StringField("Title", validators=[DataRequired()])
+    content = TextAreaField("Content", validators=[DataRequired()])
+    submit = SubmitField("Submit")

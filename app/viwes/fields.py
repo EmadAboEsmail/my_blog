@@ -1,13 +1,4 @@
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    redirect,
-    flash,
-    session,
-    url_for,
-    jsonify,
-)
+from flask import Blueprint, render_template, redirect, flash
 from app.models import User, Post
 from app import db, app
 
@@ -19,6 +10,7 @@ from flask_login import (
     LoginManager,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+from app.frames import LoginForm, SignupForm, PostForm
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -32,61 +24,57 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-@fields.route("/login", methods=["POST", "GET"])
+@fields.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
         user = User.query.filter_by(username=username).first()
         if not user or not check_password_hash(user.password, password):
             flash("من فضلك تاكد من بيانات التسجيل")
             return redirect("/login")
         login_user(user, remember=True)
-        session["username"] = current_user.username
         return redirect("/")
-    return render_template("fields/login.html")
+    return render_template("fields/login.html", form=form)
 
 
-@fields.route("/signup", methods=["POST", "GET"])
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
-    error = False
-    if request.method == "POST":
-        username = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
-        isNotUnique = User.query.filter_by(username=username).first()
-        if isNotUnique:
-            error = True
-        else:
-            password = generate_password_hash(password, method="sha256")
-            user = User(username=username, email=email, password=password)
-            db.session.add(user)
-            db.session.commit()
-            login_user(user, remember=True)
-            return redirect("/")
+    form = SignupForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        password = generate_password_hash(password, method="sha256")
+        user = User(username=username, email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user, remember=True)
 
-    return render_template("fields/signup.html", error=error)
+        return redirect("/login")
+
+    return render_template("fields/signup.html", form=form)
 
 
 @fields.route("/post", methods=["POST", "GET"])
 def post():
     n = current_user
-    if request.method == "POST":
-        title = request.form.get("title")
-        content = request.form.get("content")
-        # author_id = current_user
-        # print(current_user.id)
+    form = PostForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
         post = Post(title=title, content=content, user_id=int(current_user.id))
         db.session.add(post)
         db.session.commit()
+        flash("تم إنشاء المنشور بنجاح!", "success")
         return redirect("/")
 
-    return render_template("fields/post.html", name=n)
+    return render_template("fields/post.html", form=form, name=n)
 
 
 @fields.route("/logout")
 @login_required
 def logout():
-    # session.pop("username", None)
     logout_user()
     return redirect("/signup")

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="https://placehold.it/150x150" class="card-img-top" alt="صورة الملف الشخصي">
+                    <div class="card-body">
+          <h5 class="card-title">{{user.username}}</h5>
+                        <p class="card-text">الوصف القصير للمستخدم</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <h1>ملف التعريف</h1>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <strong>اسم المستخدم:{{user.username}}</strong>                     </li>
+                    <li class="list-group-item">
+                        <strong>البريد الإلكتروني:{{user.email}}</strong>                     </li>
+                    <li class="list-group-item">
+                        <strong>تاريخ الميلاد:</strong> 
+                    </li>
+                    <li class="list-group-item">
+                        <strong>الجنسية:</strong> الجنسية
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{%endblock%}

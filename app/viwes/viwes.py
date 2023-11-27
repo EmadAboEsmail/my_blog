@@ -8,9 +8,9 @@ viwe = Blueprint("viwe", __name__)
 
 @viwe.route("/")
 def index():
-    latest_articles = Post.query.all()
 
-    # most_read_articles = get_most_read_articles()
+    latest_articles = Post.query.order_by(Post.created_at.desc()).all()
+
     return render_template(
         "index.html",
         latest_articles=latest_articles,
@@ -47,3 +47,10 @@ def delete(article_id):
 def edit(id):
     article = Post.query.get(id)
     return render_template("edit.html", article=article)
+
+
+@viwe.route("/profile/<int:user_id>")
+def profile(user_id):
+    user = get_user(user_id)
+
+    return render_template("profile/profile.html", user=user)
