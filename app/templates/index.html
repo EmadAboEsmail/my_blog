@@ -6,13 +6,14 @@
 
    
 
-{% for post in latest_articles %}          
+ <h2>(Page {{ pagination.page }})</h2>       
+{% for post in pagination.items%}          
 <div class="container">
   <div class="row">
     <div class="col-md-8">
 
       <div class="card mb-3">
-        <div class="card-body">
+        <div class="card-body" style="color: {% if post.is_read %}lightgray{% else %}red{% endif %}">
 <p class="card-text">تاريخ الإنشاء: {{ post.created_at.strftime("%Y-%m-%d") }}</p>
               <hr>
           <h5 class="card-title">{{ post.title }}</h5>
@@ -22,8 +23,37 @@
       </div>
     </div>
   </div>
+
 </div>
+
 {% endfor %}
+ <nav aria-label="...">
+
+  <ul class="pagination">
+{% if pagination.has_prev %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('viwe.index', page=pagination.prev_num) }}">prev</a>
+    </li>
+    {% endif %}
+    {% for number in pagination.iter_pages() %}
+               {% if pagination.page != number %}
+
+    <li class="page-item"><a class="page-link" href="{{ url_for('viwe.index', page=number) }}">
+                    {{ number }}
+</a></li>
+     {% else %}
+            <span class='page-link' style="color:red;">{{ number }}</span>
+     
+        {% endif %}
+    {% endfor %}
+
+    {% if pagination.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="{{ url_for('viwe.index', page=pagination.next_num) }}">Next</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
       <main class="container">
         <div class="p-4">
           <h4 class="fst-italic">الأرشيف</h4>

@@ -23,6 +23,7 @@ class Post(db.Model):
     title = db.Column(db.String)
     content = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
 
