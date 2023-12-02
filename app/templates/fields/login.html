@@ -6,7 +6,8 @@
 
 
 {% for message in get_flashed_messages() %}
-            {{ message }}
+            <div class="alert alert-primary" role="alert">
+  {{ message }}</div>
     {% endfor %}
     <div class="container">
         <h1>Login</h1>

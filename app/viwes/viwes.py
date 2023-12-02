@@ -10,7 +10,7 @@ viwe = Blueprint("viwe", __name__)
 @viwe.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
-    pagination = Post.query.order_by(Post.created_at).paginate(page, per_page=2)
+    pagination = Post.query.order_by(Post.created_at).paginate(page, per_page=7)
 
     posts = Post.query.order_by(Post.created_at.desc()).all()
 

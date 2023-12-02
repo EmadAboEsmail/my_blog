@@ -4,10 +4,11 @@
 
 {% block content %}
 
-  {% for message in get_flashed_messages() %}
-            {{ message }}
+{% for message in get_flashed_messages() %}
+            <div class="alert alert-primary" role="alert">
+  {{ message }}</div>
     {% endfor %}
- 
+
 
  <h2>(Page {{ pagination.page }})</h2>       
 {% for post in pagination.items%}          

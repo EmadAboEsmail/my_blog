@@ -3,11 +3,18 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
+  <style>
+  code{
+    
+  background-color: #333;
+
+  }
+  </style>
 <div class="container">
     <div class="row">
       <div class="col-md-8">
         <h1>{{ article.title }}</h1>
-        <p>{{ article.content | safe }}</p>
+        <p>{{ article.content | safe}}</p>
         <p>
           <small>تاريخ النشر: {{ article.created_at.strftime("%Y-%m-%d") }}</small>
         </p>
