@@ -5,37 +5,17 @@
 {% block content %}
 
 
-
-<!-- <form action="/login" method="post"> -->
-<!--   <div class="container"> -->
-<!--     <div class="row"> -->
-<!--       <div class="col-md-6"> -->
-<!--         <div class="form-group"> -->
-<!--           <label for="username">اسم المستخدم</label> -->
-<!--           <input type="text" class="form-control form-control-lg" id="username" name="username" required> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--       <div class="col-md-6"> -->
-<!--         <div class="form-group"> -->
-<!--           <label for="password">كلمة المرور</label> -->
-<!--           <input type="password" class="form-control form-control-lg" id="password" name="password" required> -->
-<!--         </div> -->
-<!--       </div> -->
-<!--     </div> -->
-<!--     <button type="submit" class="btn btn-primary btn-lg">تسجيل الدخول</button> -->
-<!--   </div> -->
-
-<!-- </form> -->
-
+{% for message in get_flashed_messages() %}
+            {{ message }}
+    {% endfor %}
     <div class="container">
         <h1>Login</h1>
-        
         <form method="POST">
             {{ form.csrf_token }}
             <div class="form-group">
-                {{ form.username.label }}
-                {{ form.username(class="form-control") }}
-                {% for error in form.username.errors %}
+                {{ form.Email.label }}
+                {{ form.Email(class="form-control") }}
+                {% for error in form.Email.errors %}
                     <span style="color: red;">{{ error }}</span>
                 {% endfor %}
             </div>

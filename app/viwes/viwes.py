@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, flash, request
 from app.models import Post, User
 from app import db
 from .fields import USER
+import mistune
 
 viwe = Blueprint("viwe", __name__)
 
@@ -11,9 +12,9 @@ def index():
     page = request.args.get("page", 1, type=int)
     pagination = Post.query.order_by(Post.created_at).paginate(page, per_page=2)
 
-    # posts = Post.query.order_by(Post.created_at.desc()).all()
+    posts = Post.query.order_by(Post.created_at.desc()).all()
 
-    return render_template("index.html", pagination=pagination)
+    return render_template("index.html", pagination=pagination, posts=posts)
 
 
 def get_article(article_id):
@@ -26,6 +27,25 @@ def get_user(user_id):
     return article
 
 
+@viwe.route("/markdown")
+def markdown():
+    markdown_text = """
+# Heading
+
+This is an example of converting Markdown to HTML using mistune library.
+
+- Bullet point
+- Bullet point
+- Bullet point
+
+**Bold text**
+_Italic text_
+    """
+
+    html = mistune.markdown(markdown_text)
+    return render_template("markdown.html", markdown=html)
+
+
 @viwe.route("/articles/<int:article_id>")
 def article(article_id):
     article = get_article(article_id)
@@ -35,9 +55,10 @@ def article(article_id):
         db.session.commit()
         flash("تم تحديث حالة القراءة للمنشور بنجاح!", "success")
 
+    # html = mistune.markdown(article.content)
     # user = User.query.filter_by(USER)
     user = get_user(article.user_id)
-    return render_template("article.html", article=article, user=user)
+    return render_template("article.html", user=user, article=article)
 
 
 @viwe.route("/delete/<int:article_id>")

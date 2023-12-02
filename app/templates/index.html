@@ -4,10 +4,14 @@
 
 {% block content %}
 
-   
+  {% for message in get_flashed_messages() %}
+            {{ message }}
+    {% endfor %}
+ 
 
  <h2>(Page {{ pagination.page }})</h2>       
 {% for post in pagination.items%}          
+
 <div class="container">
   <div class="row">
     <div class="col-md-8">

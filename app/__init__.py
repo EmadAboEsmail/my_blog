@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_script import Manager
-
+from flask_ckeditor import CKEditor
 from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
@@ -26,7 +26,7 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command("db", MigrateCommand)
 
-
+ckeditor = CKEditor(app)
 csrf = CSRFProtect(app)
 # Register the user with Flask-Login
 

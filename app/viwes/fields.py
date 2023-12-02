@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, flash
 from app.models import User, Post
 from app import db, app
 
+import mistune
 from flask_login import (
     current_user,
     login_required,
@@ -28,9 +29,9 @@ def load_user(user_id):
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        username = form.username.data
+        email = form.Email.data
         password = form.password.data
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password, password):
             flash("من فضلك تاكد من بيانات التسجيل")
             return redirect("/login")
@@ -64,7 +65,10 @@ def post():
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
+        content = mistune.markdown(content)
+
         post = Post(title=title, content=content, user_id=int(current_user.id))
+
         db.session.add(post)
         db.session.commit()
         flash("تم إنشاء المنشور بنجاح!", "success")
