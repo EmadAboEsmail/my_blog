@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, redirect, flash, request
+from flask import Blueprint, render_template, url_for, redirect, flash, request
 from app.models import Post, User
 from app import db
 from .fields import USER
 import mistune
+from app.frames import PostForm
 
 viwe = Blueprint("viwe", __name__)
 
@@ -10,7 +11,7 @@ viwe = Blueprint("viwe", __name__)
 @viwe.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
-    pagination = Post.query.order_by(Post.created_at).paginate(page, per_page=7)
+    pagination = Post.query.order_by(Post.id).paginate(page, per_page=15)
 
     posts = Post.query.order_by(Post.created_at.desc()).all()
 
@@ -53,12 +54,12 @@ def article(article_id):
     if article:
         article.is_read = True
         db.session.commit()
-        flash("تم تحديث حالة القراءة للمنشور بنجاح!", "success")
+    text = mistune.html(article.content)
 
     # html = mistune.markdown(article.content)
     # user = User.query.filter_by(USER)
     user = get_user(article.user_id)
-    return render_template("article.html", user=user, article=article)
+    return render_template("article.html", user=user, article=article, text=text)
 
 
 @viwe.route("/delete/<int:article_id>")
@@ -69,10 +70,20 @@ def delete(article_id):
     return redirect("/")
 
 
-@viwe.route("/edit/<int:id>")
+@viwe.route("/edit/<int:id>", methods=["POST", "GET"])
 def edit(id):
-    article = Post.query.get(id)
-    return render_template("edit.html", article=article)
+    form = PostForm()
+    post = Post.query.get_or_404(id)
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash("Post updated.", "success")
+        return redirect(f"/articles/{post.id}")
+    form.title.data = post.title
+    form.content.data = post.content
+
+    return render_template("edit.html", form=form)
 
 
 @viwe.route("/profile/<int:user_id>")

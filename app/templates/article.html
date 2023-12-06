@@ -14,7 +14,7 @@
     <div class="row">
       <div class="col-md-8">
         <h1>{{ article.title }}</h1>
-        <p>{{ article.content | safe}}</p>
+        <p>{{  text | safe}}</p>
         <p>
           <small>تاريخ النشر: {{ article.created_at.strftime("%Y-%m-%d") }}</small>
         </p>
@@ -26,5 +26,7 @@
   <p>{{article.user_id}}: {{article.id}} :{{user.username}}</p>
   </div >
 <a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
+
+<a href="/edit/{{ article.id }}" class="btn btn-danger">تعديل</a>
 
 {% endblock %}

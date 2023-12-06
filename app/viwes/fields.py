@@ -65,7 +65,7 @@ def post():
     if form.validate_on_submit():
         title = form.title.data
         content = form.content.data
-        content = mistune.markdown(content)
+        # content = mistune.html(content)
 
         post = Post(title=title, content=content, user_id=int(current_user.id))
 

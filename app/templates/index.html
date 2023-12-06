@@ -1,22 +1,11 @@
 {% extends "layout.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block content %}
 
-{% for message in get_flashed_messages() %}
-            <div class="alert alert-primary" role="alert">
-  {{ message }}</div>
-    {% endfor %}
-
-
- <h2>(Page {{ pagination.page }})</h2>       
 {% for post in pagination.items%}          
-
 <div class="container">
   <div class="row">
     <div class="col-md-8">
-
       <div class="card mb-3">
         <div class="card-body" style="color: {% if post.is_read %}lightgray{% else %}red{% endif %}">
 <p class="card-text">تاريخ الإنشاء: {{ post.created_at.strftime("%Y-%m-%d") }}</p>
@@ -28,12 +17,9 @@
       </div>
     </div>
   </div>
-
 </div>
-
 {% endfor %}
  <nav aria-label="...">
-
   <ul class="pagination">
 {% if pagination.has_prev %}
     <li class="page-item">
@@ -59,7 +45,7 @@
     {% endif %}
   </ul>
 </nav>
-      <main class="container">
+<main class="container">
         <div class="p-4">
           <h4 class="fst-italic">الأرشيف</h4>
           <ol class="list-unstyled mb-0">
@@ -86,7 +72,7 @@
             <li><a href="#">Facebook</a></li>
           </ol>
         </div>
-    </main>
+</main>
 <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
   <p>تم تصميم نموذج المدونة لـ <a href="https://getbootstrap.com/">Bootstrap</a> بواسطة <a href="https://twitter.com/mdo"><bdi lang="en" dir="ltr">@mdo</bdi></a>.</p>
   <p class="mb-0">
