@@ -1,0 +1,117 @@
+{% extends 'layout.html' %}
+{% block title %}new Categories{% endblock %}
+{% block content %}
+<style>
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 20px 30px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.row {
+  display: flex;
+  align-items: left;
+}
+
+.col-sm-8 {
+  padding-right: 5px;
+}
+
+.col-sm-4 {
+  padding-left: 5px;
+}
+
+</style>
+        {% with success_messages = get_flashed_messages(category_filter="success") %}
+  {% if success_messages %}
+      {% for message in success_messages %}
+  <div class="alert alert-success"  role="alert">
+  {{ message }}</div>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+{% with delete_messages = get_flashed_messages(category_filter="delete") %}
+  {% if delete_messages %}
+      {% for message in delete_messages %}
+  <div class="alert alert-danger"  role="alert">
+  {{ message }}</div>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class="container">
+  <form method="POST" action="{{ url_for('fields.manage_category') }}">
+    <div class="row">
+      <div class="col-sm-8">
+        {{ form.csrf_token }}
+        <div class="form-group">
+         <label >New Category</label>
+      {{ form.name (class="form-control",placeholder="Enter category") }}
+
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <button type="submit" class="btn btn-primary btn-block <button animation-button">Add</button>
+      </div>
+    </div>
+  </form>
+</div>   
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      
+     <table class="table table-striped"
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>اسم الفئة</th>
+            <th>الإجراءات</th>
+          </tr>
+        </thead>
+{% for categ in category %}
+        <tbody>
+          <tr>
+            <td>{{ categ.id}}</td>
+            <td><a href="/category/{{ categ.name}}">{{ categ.name}}</a></td>
+            <td>
+                <a class="btn btn-primary" href="/category/{{categ.id}}/edit">تعديل</a>
+              <a class="btn btn-danger" href="/category/{{categ.id}}/delete">حذف</a>
+            </td>
+          </tr>
+        </tbody>
+{% endfor %}
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

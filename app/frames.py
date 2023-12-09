@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField, TextAreaField
+from wtforms import PasswordField, StringField, SubmitField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo
-
+from app.models import User, Post, Category, Comment
 from flask_ckeditor import CKEditorField
 
 
@@ -25,5 +25,23 @@ class SignupForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
-    content = CKEditorField("Content", validators=[DataRequired()])
+    content = TextAreaField("Content", validators=[DataRequired()])
+    category = SelectField("Category", coerce=int, default=1)
+
     submit = SubmitField("Submit")
+
+    def __init__(self, *args, **kwargs):
+        super(PostForm, self).__init__(*args, **kwargs)
+        self.category.choices = [
+            (category.id, category.name)
+            for category in Category.query.order_by(Category.name).all()
+        ]
+
+
+class CategoryForm(FlaskForm):
+    name = StringField("Name", validators=[DataRequired(), Length(1, 30)])
+    submit = SubmitField()
+
+    def validate_name(self, field):
+        if Category.query.filter_by(name=field.data).first():
+            print("Name already in use.")

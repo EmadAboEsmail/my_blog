@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, flash
-from app.models import User, Post
+from flask import Blueprint, render_template, redirect, flash, current_app, url_for
+
+from app.models import User, Post, Category, Comment
 from app import db, app
 
 import mistune
@@ -11,7 +12,7 @@ from flask_login import (
     LoginManager,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-from app.frames import LoginForm, SignupForm, PostForm
+from app.frames import LoginForm, SignupForm, PostForm, CategoryForm
 
 login_manager = LoginManager()
 login_manager.login_view = "login"
@@ -33,7 +34,7 @@ def login():
         password = form.password.data
         user = User.query.filter_by(email=email).first()
         if not user or not check_password_hash(user.password, password):
-            flash("من فضلك تاكد من بيانات التسجيل")
+            flash("من فضلك تاكد من بيانات التسجيل", "ckeck_login")
             return redirect("/login")
         login_user(user, remember=True)
         return redirect("/")
@@ -67,14 +68,71 @@ def post():
         content = form.content.data
         # content = mistune.html(content)
 
-        post = Post(title=title, content=content, user_id=int(current_user.id))
+        category = Category.query.get(form.category.data)
+        post = Post(
+            title=title,
+            content=content,
+            category=category,
+            user_id=int(current_user.id),
+        )
 
         db.session.add(post)
         db.session.commit()
-        flash("تم إنشاء المنشور بنجاح!", "success")
+        flash("تم إنشاء المنشور بنجاح!", "chech_'post")
         return redirect("/")
 
     return render_template("fields/post.html", form=form, name=n)
+
+
+@fields.route("/category/manage", methods=["GET", "POST"])
+@login_required
+def manage_category():
+    category = Category.query.all()
+
+    form = CategoryForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        category = Category(name=name)
+        db.session.add(category)
+        db.session.commit()
+        flash("تم انشاء الفئة.", "success")
+        return redirect(url_for("fields.manage_category"))
+    return render_template("fields/man_category.html", form=form, category=category)
+
+
+@fields.route("/category/<int:category_id>/edit", methods=["GET", "POST"])
+@login_required
+def edit_category(category_id):
+    form = CategoryForm()
+    category = Category.query.get_or_404(category_id)
+    if form.validate_on_submit():
+        category.name = form.name.data
+        db.session.commit()
+        flash("تم تعديل الفئة.", "success")
+        return redirect("/category/manage")
+
+    form.name.data = category.name
+    return render_template("fields/edit_category.html", form=form)
+
+
+@fields.route("/category/<int:category_id>/delete", methods=["GET", "POST"])
+@login_required
+def delete_category(category_id):
+    category = Category.query.get_or_404(category_id)
+
+    db.session.delete(category)
+    db.session.commit()
+
+    flash("تم حذف الفئة", "delete")
+    return redirect("/category/manage")
+
+
+@fields.route("/category/<string:category>")
+def category_posts(category):
+    posts = Post.query.filter_by(
+        category=Category.query.filter_by(name=category).first()
+    ).all()
+    return render_template("fields/category.html", category=category, posts=posts)
 
 
 @fields.route("/logout")

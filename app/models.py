@@ -26,33 +26,44 @@ class Post(db.Model):
     is_read = db.Column(db.Boolean, default=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
 
-    # tags = db.relationship(
-    # "Tag", secondary="post_tag", backref=db.backref("posts", lazy="dynamic")
-    # )
-    # comments = db.relationship("Comment", back_populates="post")
-
-
-# class Tag(db.Model):
-#     __tablename__ = "tags"
-
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String)
+    category = db.relationship("Category", back_populates="posts")
+    comments = db.relationship(
+        "Comment", back_populates="post", cascade="all, delete-orphan"
+    )
 
 
-# post_tag_table = db.Table(
-#     "post_tag",
-#     db.Column("post_id", db.Integer, db.ForeignKey("posts.id")),
-#     db.Column("tag_id", db.Integer, db.ForeignKey("tags.id")),
-# )
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), unique=True)
+
+    posts = db.relationship("Post", back_populates="category")
+
+    def delete(self):
+        default_category = Category.query.get(1)
+        posts = self.posts[:]
+        for post in posts:
+            post.category = default_category
+        db.session.delete(self)
+        db.session.commit()
 
 
-# class Comment(db.Model):
-#     __tablename__ = "comments"
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.String(30))
+    email = db.Column(db.String(254))
+    site = db.Column(db.String(255))
+    body = db.Column(db.Text)
+    from_admin = db.Column(db.Boolean, default=False)
+    reviewed = db.Column(db.Boolean, default=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
-#     id = db.Column(db.Integer, primary_key=True)
-#     content = db.Column(db.String)
-#     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    replied_id = db.Column(db.Integer, db.ForeignKey("comment.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id"))
 
-#     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-#     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"))
+    post = db.relationship("Post", back_populates="comments")
+    replies = db.relationship(
+        "Comment", back_populates="replied", cascade="all, delete-orphan"
+    )
+    replied = db.relationship("Comment", back_populates="replies", remote_side=[id])

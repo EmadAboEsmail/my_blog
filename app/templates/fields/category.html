@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center">الفئة: {{ category }}</h1>
+        <div class="row">
+            {% for post in posts %}
+            <div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-3">
+        <div class="card-body" style="color: {% if post.is_read %}lightgray{% else %}red{% endif %}">
+<p class="card-text">تاريخ الإنشاء: {{ post.created_at.strftime("%Y-%m-%d") }}</p>
+              <hr>
+          <h5 class="card-title">{{ post.title }}</h5>
+          <p class="card-text">{{ post.content[:100]|safe }}</p>
+              <a href="/articles/{{post.id}}" class="btn btn-primary">قراءة المزيد</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

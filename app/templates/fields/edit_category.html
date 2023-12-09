@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block title %}new Categories{% endblock %}
+{% block content %}new Categories
+
+
+
+<form method="POST" >
+<div class="page-header">
+        {{ form.csrf_token }}
+        <h1>New Category</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form.name.label }}
+            {{ form.name}}
+        </div>
+    </div>
+
+       <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
+

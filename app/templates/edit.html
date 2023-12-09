@@ -1,15 +1,23 @@
 {% extends "layout.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block content %}
+<style>
+ .form-control{
+   height:300px;
+   width:100%;
+ }
+.form-title{
+   width:100%;
+   height:50px;
+ }
+</style>
  <div class="container mt-4">
     <h1>Create a Post</h1>
     <form method="POST">
         {{ form.csrf_token }}
         <div class="form-group">
             {{ form.title.label }}
-            {{ form.title(class="form-control") }}
+            {{ form.title(class="form-title") }}
         </div>
         <div class="form-group">
             {{ form.content.label }}
@@ -18,5 +26,4 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
  </div>
-
  {% endblock %}

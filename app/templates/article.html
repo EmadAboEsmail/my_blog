@@ -1,16 +1,36 @@
 {% extends "layout.html" %}
-
 {% block title %}{{title}}{% endblock %}
-
 {% block content %}
-  <style>
-  code{
-    
-  background-color: #333;
+    <div class="container">
+        <div class="article">
+            <div class="info">
+                <span class="label">تاريخ الإنشاء:</span>
+                <span id="date">{{ article.created_at.strftime("%Y-%m-%d") }}</span>
+            </div>
+            <div class="info">
+                <span class="label">الفئة:</span>
+                <span id="category">{{ article.category.name }}</span>
+            </div>
+            <div class="info">
+                <span class="label">المؤلف:</span>
+                <span id="author">{{ user.username }}</span>
+            </div>
+            <div class="info">
+                <span class="label">عدد الكلمات:</span>
+                <span id="wordCount">عدد الكلمات</span>
+            </div>
+            <div class="info">
+                <span class="label">مدة القراءة:</span>
+                <span id="readingTime">مدة القراءة</span>
+            </div>
+        </div>
+    </div>
 
-  }
-  </style>
-<div class="container">
+
+
+
+
+  <div class="container">
     <div class="row">
       <div class="col-md-8">
         <h1>{{ article.title }}</h1>
@@ -23,10 +43,10 @@
         <!-- <img  alt="صورة المنشور"> -->
       </div>
     </div>
-  <p>{{article.user_id}}: {{article.id}} :{{user.username}}</p>
+  <p>ID منشئ الممشور :{{article.user_id}}: ID المنشور :{{article.id}} اسم المستخدم :{{user.username}} </p>
+    <p>Categroy Name: {{article.category.name}}</p>
   </div >
 <a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
 
 <a href="/edit/{{ article.id }}" class="btn btn-danger">تعديل</a>
-
 {% endblock %}

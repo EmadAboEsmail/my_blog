@@ -8,6 +8,16 @@ from app.frames import PostForm
 viwe = Blueprint("viwe", __name__)
 
 
+def get_article(article_id):
+    article = Post.query.get(article_id)
+    return article
+
+
+def get_user(user_id):
+    user = User.query.get(user_id)
+    return user
+
+
 @viwe.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
@@ -16,35 +26,6 @@ def index():
     posts = Post.query.order_by(Post.created_at.desc()).all()
 
     return render_template("index.html", pagination=pagination, posts=posts)
-
-
-def get_article(article_id):
-    article = Post.query.get(article_id)
-    return article
-
-
-def get_user(user_id):
-    article = User.query.get(user_id)
-    return article
-
-
-@viwe.route("/markdown")
-def markdown():
-    markdown_text = """
-# Heading
-
-This is an example of converting Markdown to HTML using mistune library.
-
-- Bullet point
-- Bullet point
-- Bullet point
-
-**Bold text**
-_Italic text_
-    """
-
-    html = mistune.markdown(markdown_text)
-    return render_template("markdown.html", markdown=html)
 
 
 @viwe.route("/articles/<int:article_id>")
