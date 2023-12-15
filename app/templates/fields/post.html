@@ -1,19 +1,19 @@
 {% extends "layout.html" %}
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
 <style>
-.form-control{
-   height:300px;
-   width:100%;
- }
-.form-title{
-   width:100%;
-   height:50px;
- }
+.form-control {
+   height: 300px;
+   width: 100%;
+}
+.form-title {
+   width: 100%;
+   height: 50px;
+}
 </style>
 <form method="POST" action="{{ url_for('fields.post') }}">
 <div class="container mt-4">
-  <h1>{{name.username}}</h1>
+  <h1>{{ name.username }}</h1>
     <h1>Create a Post</h1>
         {{ form.csrf_token }}
         <div class="form-group">
@@ -24,13 +24,11 @@
             {{ form.content.label }}
             {{ form.content(class="form-control") }}
         </div>
- <div class="form-group">
+        <div class="form-group">
             {{ form.category.label }}
             {{ form.category() }}
         </div>
        <button type="submit" class="btn btn-primary">Submit</button>
 </div>
 </form>
-
-
- {% endblock %}
+{% endblock %}

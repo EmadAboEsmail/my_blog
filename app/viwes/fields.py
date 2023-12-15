@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, flash, current_app, url_for
+from flask import Blueprint, render_template, redirect, flash, url_for
 
 from app.models import User, Post, Category, Comment
 from app import db, app
@@ -12,6 +12,7 @@ from flask_login import (
     LoginManager,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
+
 from app.frames import LoginForm, SignupForm, PostForm, CategoryForm
 
 login_manager = LoginManager()
@@ -133,6 +134,12 @@ def category_posts(category):
         category=Category.query.filter_by(name=category).first()
     ).all()
     return render_template("fields/category.html", category=category, posts=posts)
+
+
+@fields.route("/posts/<int:post_id>")
+def show_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template("post.html", post=post, comment_form=comment_form)
 
 
 @fields.route("/logout")

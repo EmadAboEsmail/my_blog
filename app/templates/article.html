@@ -1,52 +1,90 @@
 {% extends "layout.html" %}
-{% block title %}{{title}}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 {% block content %}
-    <div class="container">
-        <div class="article">
-            <div class="info">
-                <span class="label">تاريخ الإنشاء:</span>
-                <span id="date">{{ article.created_at.strftime("%Y-%m-%d") }}</span>
-            </div>
-            <div class="info">
-                <span class="label">الفئة:</span>
-                <span id="category">{{ article.category.name }}</span>
-            </div>
-            <div class="info">
-                <span class="label">المؤلف:</span>
-                <span id="author">{{ user.username }}</span>
-            </div>
-            <div class="info">
-                <span class="label">عدد الكلمات:</span>
-                <span id="wordCount">عدد الكلمات</span>
-            </div>
-            <div class="info">
-                <span class="label">مدة القراءة:</span>
-                <span id="readingTime">مدة القراءة</span>
-            </div>
-        </div>
-    </div>
+ <style>
+ .text {
+    color: blue;
+    background-color: #777;
+    font-weight: bold;
+
+  font-family: "Times New Roman", Times, serif;
 
 
-
-
-
+    font-size: 12px;
+}
+ </style> 
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <h1>{{ article.title }}</h1>
-        <p>{{  text | safe}}</p>
-        <p>
-          <small>تاريخ النشر: {{ article.created_at.strftime("%Y-%m-%d") }}</small>
-        </p>
+        <div class="article">
+          <div class="info">
+            <span class="label">تاريخ الإنشاء:</span>
+            <span id="date">{{ article.created_at.strftime("%Y-%m-%d") }}</span>
+          </div>
+          <div class="info">
+            <span class="label">الفئة:</span>
+            <span id="category">{{ article.category.name }}</span>
+          </div>
+          <div class="info">
+            <span class="label">المؤلف:</span>
+            <span id="author">{{ user.username }}</span>
+          </div>
+          <div class="info">
+            <span class="label">عدد الكلمات:</span>
+            <span id="wordCount">{{len_text  }}</span>
+          </div>
+          <div class="info">
+            <span class="label">مدة القراءة:</span>
+            <span id="readingTime">{{read}}</span>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="card-body text">
+            <h1 class="card-title">{{ article.title }}</h1>
+            <p class="card-text ">{{ text | safe }}</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">تاريخ النشر: {{ article.created_at.strftime("%Y-%m-%d") }}</small>
+          </div>
+        </div>
+        
+        <p>ID منشئ الممشور: {{ article.user_id }}, ID المنشور: {{ article.id }}, اسم المستخدم: {{ user.username }}</p>
+        <p>Categroy Name: {{ article.category.name }}</p>
+        <a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
+        <a href="/edit/{{ article.id }}" class="btn btn-danger">تعديل</a>
+        <hr>
+        
+        <h3>Comments:</h3>
+        {% for comment in article.comments %}
+          <div class="container">
+            <div class="card mb-3">
+              <div class="card-body">
+                <p class="card-text">{{ comment.body }}</p>
+                <p class="card-text">{{ comment.email }}</p>
+              </div>
+              <div class="card-footer">
+                <a class="btn btn-primary" href="/articles/{{ article.id }}/comments/{{ comment.id }}/edit">تعديل التعليق</a>
+                <a class="btn btn-danger" href="/articles/{{ article.id }}/comments/{{ comment.id }}/delete">حذف التعليق</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        
+        <hr>
+        <h1>Create Comment</h1>
+        <form action="/articles/{{ article.id }}/comments/new" method="POST">
+          {{ form.csrf_token }}
+          <div class="form-group">
+            {{ form.body.label }}
+            {{ form.body }}
+          </div>
+          <button type="submit" class="btn btn-primary">إضافة التعليق</button>
+        </form>
       </div>
       <div class="col-md-4">
-        <!-- <img  alt="صورة المنشور"> -->
+        <!-- <img alt="صورة المنشور"> -->
       </div>
     </div>
-  <p>ID منشئ الممشور :{{article.user_id}}: ID المنشور :{{article.id}} اسم المستخدم :{{user.username}} </p>
-    <p>Categroy Name: {{article.category.name}}</p>
-  </div >
-<a href="/delete/{{ article.id }}" class="btn btn-danger">حذف</a>
-
-<a href="/edit/{{ article.id }}" class="btn btn-danger">تعديل</a>
+  </div>
 {% endblock %}

@@ -21,9 +21,10 @@ class Post(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
-    content = db.Column(db.String)
+    content = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     is_read = db.Column(db.Boolean, default=False)
+    can_comment = db.Column(db.Boolean, default=True)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))

@@ -17,8 +17,9 @@ def not_found(error):
 
 
 app.config.from_object(config.development)
-Bootstrap(app)
+bootstrap = Bootstrap()
 
+bootstrap.init_app(app)
 # print(app.config["SQLALCHEMY_DATABASE_URI"])
 db = SQLAlchemy(app)
 app.app_context()

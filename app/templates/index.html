@@ -1,41 +1,59 @@
 {% extends "layout.html" %}
 {% block title %}{{title}}{% endblock %}
 {% block content %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    #clock {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 100px;
+    }
+    .row {
+   transform: scale(1);
+   transition: transform 0.3s ease;
+}
 
-{% for post in pagination.items%}          
+.row:hover {
+   transform: scale(1.1);
+}
+  </style>
+
+{% for post in pagination.items%}
 <div class="container">
   <div class="row">
     <div class="col-md-8">
       <div class="card mb-3">
-        <div class="card-body" style="color: {% if post.is_read %}lightgray{% else %}red{% endif %}">
-<p class="card-text">تاريخ الإنشاء: {{ post.created_at.strftime("%Y-%m-%d") }}</p>
-              <hr>
+        <div class="card-body" style="color: {% if post.is_read %}#fff{% else %}red{% endif %}">
+          <p class="card-text">تاريخ الإنشاء: {{ post.created_at.strftime("%Y-%m-%d") }}</p>
+          <hr>
           <h5 class="card-title">{{ post.title }}</h5>
           <p class="card-text">{{ post.content[:100]|safe }}</p>
-              <a href="/articles/{{post.id}}" class="btn btn-primary">قراءة المزيد</a>
+          <img src="{{ post.thumbnail }}" class="card-img-top" alt="صورة المقالة">
+          <a href="/articles/{{post.id}}" class="btn btn-primary">قراءة المزيد</a>
         </div>
       </div>
     </div>
   </div>
 </div>
 {% endfor %}
- <nav aria-label="...">
+
+<nav aria-label="...">
   <ul class="pagination">
-{% if pagination.has_prev %}
+    {% if pagination.has_prev %}
     <li class="page-item">
       <a class="page-link" href="{{ url_for('viwe.index', page=pagination.prev_num) }}">prev</a>
     </li>
     {% endif %}
     {% for number in pagination.iter_pages() %}
-               {% if pagination.page != number %}
-
+    {% if pagination.page != number %}
     <li class="page-item"><a class="page-link" href="{{ url_for('viwe.index', page=number) }}">
-                    {{ number }}
-</a></li>
-     {% else %}
-            <span class='page-link' style="color:red;">{{ number }}</span>
-     
-        {% endif %}
+        {{ number }}
+      </a></li>
+    {% else %}
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ number }}</span>
+    </li>
+    {% endif %}
     {% endfor %}
 
     {% if pagination.has_next %}
@@ -45,38 +63,72 @@
     {% endif %}
   </ul>
 </nav>
-<main class="container">
-        <div class="p-4">
-          <h4 class="fst-italic">الأرشيف</h4>
-          <ol class="list-unstyled mb-0">
-            <li><a href="#">مارس 2021</a></li>
-            <li><a href="#">شباط 2021</a></li>
-            <li><a href="#">يناير 2021</a></li>
-            <li><a href="#">ديسمبر 2020</a></li>
-            <li><a href="#">نوفمبر 2020</a></li>
-            <li><a href="#">أكتوبر 2020</a></li>
-            <li><a href="#">سبتمبر 2020</a></li>
-            <li><a href="#">اغسطس 2020</a></li>
-            <li><a href="#">يوليو 2020</a></li>
-            <li><a href="#">يونيو 2020</a></li>
-            <li><a href="#">مايو 2020</a></li>
-            <li><a href="#">ابريل 2020</a></li>
-          </ol>
-        </div>
 
-        <div class="p-4">
-          <h4 class="fst-italic">في مكان آخر</h4>
-          <ol class="list-unstyled">
-            <li><a href="#">GitHub</a></li>
-            <li><a href="#">Twitter</a></li>
-            <li><a href="#">Facebook</a></li>
-          </ol>
-        </div>
+<main class="container">
+  <div class="p-4">
+    <h4 class="fst-italic">الأرشيف</h4>
+    <ol class="list-unstyled mb-0">
+      <li><a href="#">مارس 2021</a></li>
+      <li><a href="#">شباط 2021</a></li>
+      <li><a href="#">يناير 2021</a></li>
+      <li><a href="#">ديسمبر 2020</a></li>
+      <li><a href="#">نوفمبر 2020</a></li>
+      <li><a href="#">أكتوبر 2020</a></li>
+      <li><a href="#">سبتمبر 2020</a></li>
+      <li><a href="#">اغسطس 2020</a></li>
+      <li><a href="#">يوليو 2020</a></li>
+      <li><a href="#">يونيو 2020</a></li>
+      <li><a href="#">مايو 2020</a></li>
+      <li><a href="#">ابريل 2020</a></li>
+    </ol>
+  </div>
+
+  <div class="p-4">
+    <h4 class="fst-italic">في مكان آخر</h4>
+    <ol class="list-unstyled">
+      <li><a href="#">GitHub</a></li>
+      <li><a href="#">Twitter</a></li>
+      <li><a href="#">Facebook</a></li>
+    </ol>
+  </div>
 </main>
-<footer class="py-5 text-center text-body-secondary bg-body-tertiary">
-  <p>تم تصميم نموذج المدونة لـ <a href="https://getbootstrap.com/">Bootstrap</a> بواسطة <a href="https://twitter.com/mdo"><bdi lang="en" dir="ltr">@mdo</bdi></a>.</p>
-  <p class="mb-0">
-    <a href="#">عد إلى الأعلى</a>
-  </p>
-</footer>
+  <div id="clock">
+    <!-- هنا ستعرض الساعة -->
+  </div>
+
+  <script>
+
+function updateClock() {
+  var currentTime = new Date();
+  var hours = currentTime.getHours();
+  var minutes = currentTime.getMinutes();
+  var seconds = currentTime.getSeconds();
+  var meridiem = "AM"; // صباحاً (AM) أو مساءً (PM)
+
+  // تحويل الوقت إلى تنسيق 12 ساعة
+  if (hours > 12) {
+    hours -= 12;
+    meridiem = "PM";
+  } else if (hours === 0) {
+    hours = 12;
+    meridiem = "AM";
+  } else if (hours === 12) {
+    meridiem = "PM";
+  }
+
+  // إضافة صفر للوقت بصورة مناسبة
+  hours = (hours < 10 ? "0" : "") + hours;
+  minutes = (minutes < 10 ? "0" : "") + minutes;
+  seconds = (seconds < 10 ? "0" : "") + seconds;
+
+  // تجميع الوقت في صيغة hh:mm:ss AM/PM
+  var timeString = meridiem +" " +hours + ":" + minutes + ":" + seconds  ;
+
+  // تحديث الساعة في العنصر المحدد
+  $("#clock").text(timeString);
+}
+
+    // تحديث الساعة كل ثانية واحدة
+    setInterval(updateClock, 1000);
+  </script>
 {% endblock %}
