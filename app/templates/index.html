@@ -2,22 +2,14 @@
 {% block title %}{{title}}{% endblock %}
 {% block content %}
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <style>
-    #clock {
-      font-size: 20px;
-      text-align: center;
-      margin-top: 100px;
-    }
-    .row {
-   transform: scale(1);
-   transition: transform 0.3s ease;
-}
-
-.row:hover {
-   transform: scale(1.1);
+<style>
+#clock {
+  font-size: 20px;
+  text-align: center;
+  margin-top: 100px;
 }
   </style>
-
+<a  class='btn btn-primary' href="/test">teat</a>
 {% for post in pagination.items%}
 <div class="container">
   <div class="row">

@@ -1,0 +1,23 @@
+body{
+
+}
+p::before{
+  content: '';
+  background-color:red;
+  width:75%;
+  height:70px;
+  position: absolute;
+  position: re;
+  left: 10px;
+  align-content: space-around;
+  margin: ;
+  left: c;
+  border-radius:
+
+}
+
+
+p:checked{
+ background-color:red; 
+}
+

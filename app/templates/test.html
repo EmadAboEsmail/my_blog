@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+<style>
+
+.con{
+   
+  background-color: block;
+  width:45px;
+  height:40px;
+  margin:50px auto;
+  padding:3px;
+  /* position:relative; */
+  display:flex;
+  /* align-items:center; */
+  justify-content:center;
+  align-content: space-evenly;
+  flex-flow:wrap; 
+  border-radius:7px;
+  border:2px solid green;
+
+
+}
+.con span{
+  background-color:green;
+  width:75%;
+  height:calc(30% /3);
+  border-radius:7px;
+  /* margin:.25px; */
+}
+
+.con input[type=checkbox]{
+ 
+ display:none;
+}
+
+</style>
+<div class='con'>
+  <input type="checkbox">
+ <span></span>
+ <span></span>
+ <span></span>
+</div>
+{% endblock %}

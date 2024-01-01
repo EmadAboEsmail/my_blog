@@ -18,6 +18,11 @@ def get_user(user_id):
     return user
 
 
+@viwe.route("/test")
+def test():
+    return render_template("test.html")
+
+
 @viwe.route("/")
 def index():
     page = request.args.get("page", 1, type=int)
@@ -37,7 +42,24 @@ def article(article_id):
     if article:
         article.is_read = True
         db.session.commit()
-    text = mistune.html(article.content)
+    markdown = mistune.create_markdown(
+        plugins=[
+            "mark",
+            "strikethrough",
+            "footnotes",
+            "table",
+            "url",
+            "task_lists",
+            "def_list",
+            "abbr",
+            "insert",
+            "superscript",
+            "subscript",
+            "math",
+            "spoiler",
+        ]
+    )
+    text = markdown(article.content)
     count = str(text)
     w = count.split(" ")
     len_text = len(w)

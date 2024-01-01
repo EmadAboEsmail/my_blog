@@ -1,0 +1,33 @@
+:root{
+  --mainColor:  green;
+}
+
+.nv{
+  position: relative;
+}
+.search{
+  position: absolute;
+  bottom:50px;
+}
+.nv-t{
+  border:solid 1px var(--mainColor);
+}
+.st-my{
+  position: sticky;
+  border-bottom: solid 1px var(--mainColor);
+ }
+.border-g{
+  border:solid 2px green;
+  }
+.taggle-but{
+    border:solid 2px green;
+    background-color: tan;
+    background-color: black;
+    border-radius: 3px;
+    padding: 5px 7px;
+
+  /* justify-content:space-around; */
+}
+
+
+
